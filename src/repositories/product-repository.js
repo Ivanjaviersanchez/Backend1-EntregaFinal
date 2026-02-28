@@ -5,13 +5,30 @@ class ProductRepository {
         this.model = model;
     }
 
-    getAll = async() => {
-        try {
-            return await this.model.find();
-        } catch (error) {
-            throw new Error(error)
+    getAll = async ({ limit = 10, page = 1, sort, query }) => {
+    const filter = {};
+
+    /* filtro por disponibilidad o categoría  */
+    if (query) {
+        if (query === "available") {
+            filter.stock = { $gt: 0 };
+        } else {
+            filter.category = query;
         }
     }
+
+    const options = {
+        page: Number(page), 
+        limit: Number(limit),
+        lean: true
+    };
+
+    if (sort === "asc") options.sort = { price: 1 };
+    if (sort === "desc") options.sort = { price: -1 };
+
+    return await this.model.paginate(filter, options);
+};
+
     getById = async(id) => {
         try {
             return await this.model.findById(id);

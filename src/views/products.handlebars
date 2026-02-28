@@ -1,0 +1,55 @@
+<h1>Productos</h1>
+
+<form method="GET" action="/products">
+  <input name="query" placeholder="categoría o available">
+  <select name="sort">
+    <option value="">Sin orden</option>
+    <option value="asc">Precio asc</option>
+    <option value="desc">Precio desc</option>
+  </select>
+  <button type="submit">Filtrar</button>
+</form>
+
+<ul>
+    {{#each products}}
+        <li>
+        <strong>{{this.name}}</strong>
+        - ${{this.price}}
+        - Stock: {{this.stock}}
+
+        <a href="/products/{{this._id}}">
+            Ver detalle
+        </a>
+
+        <button onclick="addToCart('{{this._id}}')">
+            Agregar al carrito
+        </button>
+        </li>
+    {{/each}}
+</ul>
+
+<hr>
+
+<div>
+    {{#if hasPrevPage}}
+        <a href="{{prevLink}}">⬅ Página anterior</a>
+    {{/if}}
+
+    <span> Página {{page}} de {{totalPages}} </span>
+
+    {{#if hasNextPage}}
+        <a href="{{nextLink}}">Página siguiente ➡</a>
+    {{/if}}
+</div>
+
+<script>
+    async function addToCart(productId) {
+        const cartId = "69a0ebe61d28490fdeb15620"; // hacerlo dinámico
+
+        await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: "POST"
+        });
+
+        alert("Producto agregado al carrito");
+    }
+</script>

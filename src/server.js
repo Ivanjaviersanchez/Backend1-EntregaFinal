@@ -1,6 +1,9 @@
 import express from "express";
 import { initMongoDB } from "./config/db-connection.js";
 import productRouter from "./routes/product-router.js";
+import cartRouter from "./routes/cart-router.js";
+import handlebars from "express-handlebars";
+import viewsRouter from "./routes/views-router.js";
 import { errorHandler } from "./middlewares/error-handler.js";
 
 /* import "./config/db-connection.js"; */
@@ -10,7 +13,19 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(`/products`, productRouter);
+/*  RUTAS DE LA API  */ 
+app.use("/api/products", productRouter);
+app.use("/api/carts", cartRouter);
+
+/*  VISTAS AL NAVEGADOR */
+app.engine("handlebars", handlebars.engine({
+    defaultLayout: "main",
+    layoutsDir: process.cwd() + "/src/views/layouts"
+}));
+app.set("view engine", "handlebars");
+app.set("views", process.cwd() + "/src/views");
+
+app.use("/", viewsRouter);
 
 /*   MIDLEWARE DE ERRORES   */
 app.use(errorHandler);

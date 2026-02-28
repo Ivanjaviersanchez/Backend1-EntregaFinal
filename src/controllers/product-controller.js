@@ -8,12 +8,27 @@ class ProductController {
 
     getAll = async(req, res, next) => {
         try {
-            const response = await this.repository.getAll();
-            res.json(response);
+            const { limit, page, sort, query } = req.query;
+
+            const result = await this.repository.getAll({limit, page, sort, query});
+
+            res.json({
+                status: "success",
+                payload: result.docs,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.hasPrevPage ? `/products?page=${result.prevPage}` : null,
+                nextLink: result.hasNextPage ? `/products?page=${result.nextPage}` : null
+            });
+
         } catch (error) {
-            next(error)
+            next(error);
         }
-    }
+    };
     
     getById = async(req, res, next) => {
         try {
