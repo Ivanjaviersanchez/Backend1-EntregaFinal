@@ -20,8 +20,19 @@ app.use("/api/carts", cartRouter);
 /*  VISTAS AL NAVEGADOR */
 app.engine("handlebars", handlebars.engine({
     defaultLayout: "main",
-    layoutsDir: process.cwd() + "/src/views/layouts"
+    layoutsDir: process.cwd() + "/src/views/layouts",
+    helpers: {
+        multiply: (a, b) => a * b,
+
+        cartTotal: (products) => {
+            return products.reduce(
+                (total, item) => total + item.product.price * item.quantity,
+                0
+            );
+        }
+    }
 }));
+
 app.set("view engine", "handlebars");
 app.set("views", process.cwd() + "/src/views");
 
