@@ -6,28 +6,28 @@ class ProductRepository {
     }
 
     getAll = async ({ limit = 10, page = 1, sort, query }) => {
-    const filter = {};
+        const filter = {};
 
-    /* filtro por disponibilidad o categoría  */
-    if (query) {
-        if (query === "available") {
-            filter.stock = { $gt: 0 };
-        } else {
-            filter.category = query;
+        /* filtro por disponibilidad o categoría  */
+        if (query) {
+            if (query === "available") {
+                filter.stock = { $gt: 0 };
+            } else {
+                filter.category = query;
+            }
         }
-    }
 
-    const options = {
-        page: Number(page), 
-        limit: Number(limit),
-        lean: true
+        const options = {
+            page: Number(page), 
+            limit: Number(limit),
+            lean: true
+        };
+
+        if (sort === "asc") options.sort = { price: 1 };
+        if (sort === "desc") options.sort = { price: -1 };
+
+        return await this.model.paginate(filter, options);
     };
-
-    if (sort === "asc") options.sort = { price: 1 };
-    if (sort === "desc") options.sort = { price: -1 };
-
-    return await this.model.paginate(filter, options);
-};
 
     getById = async(id) => {
         try {
@@ -36,6 +36,12 @@ class ProductRepository {
             throw new Error(error)
         }
     }
+
+    /*  RETORNA LAS CATEGORIAS SIN REPETIR  */
+    getCategories = async () => {
+        return await this.model.distinct("category");
+    };
+
     create = async(body) => {
         try {
             return await this.model.create(body);

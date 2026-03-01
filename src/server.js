@@ -25,11 +25,11 @@ app.engine("handlebars", handlebars.engine({
         multiply: (a, b) => a * b,
 
         cartTotal: (products) => {
-            return products.reduce(
-                (total, item) => total + item.product.price * item.quantity,
+            return products.reduce((total, item) => total + item.product.price * item.quantity,
                 0
             );
-        }
+        },
+        ifEquals: (a, b, options) => a === b ? options.fn(this) : options.inverse(this)
     }
 }));
 

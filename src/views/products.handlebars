@@ -2,12 +2,28 @@
 
 <!-- FILTROS -->
 <form method="GET" action="/products">
-    <input name="query" placeholder="categoría o available">
-    
+
+    <select name="query">
+        <option value="">Todas las categorías</option>
+        {{#each categories}}
+        <option value="{{this}}" {{#ifEquals this ../selectedCategory}}selected{{/ifEquals}}>
+            {{this}}
+        </option>
+        {{/each}}
+
+        <option value="available" {{#ifEquals "available" selectedCategory}}selected{{/ifEquals}}>
+        Solo disponibles
+        </option>
+    </select>
+
     <select name="sort">
         <option value="">Sin orden</option>
-        <option value="asc">Precio ascendente</option>
-        <option value="desc">Precio descendente</option>
+        <option value="asc" {{#ifEquals "asc" selectedSort}}selected{{/ifEquals}}>
+        Precio ascendente
+        </option>
+        <option value="desc" {{#ifEquals "desc" selectedSort}}selected{{/ifEquals}}>
+        Precio descendente
+        </option>
     </select>
 
     <button type="submit">Filtrar</button>
