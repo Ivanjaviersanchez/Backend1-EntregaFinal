@@ -1,24 +1,20 @@
-<h1> Ecommerce Backend</h1>
+<h1>Ecommerce Backend</h1>
 
 <p>Aplicación con Express + MongoDB + Handlebars</p>
 
 <hr>
 
 <div>
-    <a href="/products">
+    <a href="/products?cart={{cartId}}">
         <button>Ver catálogo de productos</button>
     </a>
 
-    <a href="/carts/69a0ebe61d28490fdeb15620">
+    <a href="/carts/{{cartId}}?cart={{cartId}}">
         <button>Ver mi carrito</button>
     </a>
 </div>
 
 <br>
-
-<p>
-    Funcionalidades implementadas:
-</p>
 
 <ul>
     <li>Persistencia en MongoDB</li>

@@ -2,9 +2,11 @@
 
 <!-- FILTROS -->
 <form method="GET" action="/products">
+    <input type="hidden" name="cart" value="{{cartId}}">
 
     <select name="query">
         <option value="">Todas las categorías</option>
+
         {{#each categories}}
         <option value="{{this}}" {{#ifEquals this ../selectedCategory}}selected{{/ifEquals}}>
             {{this}}
@@ -12,17 +14,19 @@
         {{/each}}
 
         <option value="available" {{#ifEquals "available" selectedCategory}}selected{{/ifEquals}}>
-        Solo disponibles
+            Solo disponibles
         </option>
     </select>
 
     <select name="sort">
         <option value="">Sin orden</option>
+
         <option value="asc" {{#ifEquals "asc" selectedSort}}selected{{/ifEquals}}>
-        Precio ascendente
+            Precio ascendente
         </option>
+
         <option value="desc" {{#ifEquals "desc" selectedSort}}selected{{/ifEquals}}>
-        Precio descendente
+            Precio descendente
         </option>
     </select>
 
@@ -31,9 +35,7 @@
 
 <hr>
 
-<p>
-    Página {{page}} de {{totalPages}}
-</p>
+<p>Página {{page}} de {{totalPages}}</p>
 
 <!-- LISTA DE PRODUCTOS -->
 <ul>
@@ -46,7 +48,8 @@
             Stock: {{this.stock}}
             <br>
 
-            <a href="/products/{{this._id}}">
+            <!-- mantener carrito al ir al detalle -->
+            <a href="/products/{{this._id}}?cart={{../cartId}}">
                 Ver detalle
             </a>
 
@@ -62,32 +65,32 @@
 <!-- PAGINACIÓN -->
 <div>
     {{#if hasPrevPage}}
-        <a href="{{prevLink}}">⬅ Página anterior</a>
+        <a href="{{prevLink}}&cart={{cartId}}">⬅ Página anterior</a>
     {{/if}}
 
     {{#if hasNextPage}}
-        <a href="{{nextLink}}">Página siguiente ➡</a>
+        <a href="{{nextLink}}&cart={{cartId}}">Página siguiente ➡</a>
     {{/if}}
 </div>
 
 <script>
-    async function addToCart(productId) {
-        try {
-            const cartId = "69a0ebe61d28490fdeb15620"; // luego lo hacemos dinámico
+async function addToCart(productId) {
+    try {
+        const cartId = "{{cartId}}";
 
-            const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
-                method: "POST"
-            });
+        const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: "POST"
+        });
 
-            if (!response.ok) {
-                throw new Error("Error al agregar producto");
-            }
-
-            alert("Producto agregado al carrito");
-
-        } catch (error) {
-            console.error(error);
-            alert("No se pudo agregar el producto");
+        if (!response.ok) {
+            throw new Error("Error al agregar producto");
         }
+
+        alert("Producto agregado al carrito");
+
+    } catch (error) {
+        console.error(error);
+        alert("No se pudo agregar el producto");
     }
+}
 </script>

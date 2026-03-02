@@ -50,36 +50,36 @@
 {{/if}}
 
 <br>
-<a href="/products">← Seguir comprando</a>
+<a href="/products?cart={{cartId}}">← Seguir comprando</a>
 
 
 <script>
-const cartId = "69a0ebe61d28490fdeb15620"; // ID DEL CARRITO EN USO 
+    const cartId = "{{cartId}}"; 
 
-async function updateQuantity(productId, quantity) {
-    await fetch(`/api/carts/${cartId}/products/${productId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: Number(quantity) })
-    });
+    async function updateQuantity(productId, quantity) {
+        await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quantity: Number(quantity) })
+        });
 
-    location.reload();
-}
+        location.reload();
+    }
 
-async function removeProduct(productId) {
-    await fetch(`/api/carts/${cartId}/products/${productId}`, {
-        method: "DELETE"
-    });
+    async function removeProduct(productId) {
+        await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: "DELETE"
+        });
 
-    location.reload();
-}
+        location.reload();
+    }
 
-async function clearCart() {
-    await fetch(`/api/carts/${cartId}`, {
-        method: "DELETE"
-    });
+    async function clearCart() {
+        await fetch(`/api/carts/${cartId}`, {
+            method: "DELETE"
+        });
 
-    alert("Carrito vaciado");
-    location.reload();
-}
+        alert("Carrito vaciado");
+        location.reload();
+    }
 </script>

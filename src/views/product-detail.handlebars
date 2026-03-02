@@ -9,26 +9,23 @@
 </button>
 
 <br><br>
-<a href="/products">⬅ Volver</a>
+<a href="/products?cart={{cartId}}">⬅ Volver</a>
 
 <script>
-    async function addToCart(productId) {
-        try {
-            const cartId = "69a0ebe61d28490fdeb15620"; // ← reemplazar por tu id
+async function addToCart(productId) {
+    try {
+        const cartId = "{{cartId}}";
 
-            const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
-                method: "POST"
-            });
+        const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: "POST"
+        });
 
-            if (!response.ok) {
-                throw new Error("No se pudo agregar el producto");
-            }
+        if (!response.ok) throw new Error();
 
-            alert("Producto agregado al carrito");
+        alert("Producto agregado al carrito");
 
-        } catch (error) {
-            console.error(error);
-            alert("Error al agregar producto");
-        }
+    } catch (error) {
+        alert("Error al agregar producto");
     }
+}
 </script>
